@@ -1,0 +1,13 @@
+version: "3.8"
+services:
+  postgres-db:
+    container_name: postgres
+    image: postgres # use latest official postgres version
+    restart: always
+    environment:
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: book-dev-db
+      POSTGRES_HOST_AUTH_METHOD: password
+    ports:
+      - "5432:5432"
