@@ -27,7 +27,7 @@ public class BookController {
     @GetMapping("/{id}")
     public ResponseEntity<Book> findById(@PathVariable Long id)
     {
-        return new ResponseEntity<Book>(repository.findById(id).get(),HttpStatus.FOUND);
+        return new ResponseEntity<>(repository.findById(id).get(), HttpStatus.FOUND);
     }
 
     @PatchMapping("/{id}")
