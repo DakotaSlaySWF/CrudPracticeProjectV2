@@ -1,5 +1,6 @@
 package com.galvanize.CrudPracticeProjectV2.Book;
 
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -12,15 +13,13 @@ import java.util.Map;
 import java.util.TimeZone;
 
 @Service
-public class BookService {
+@AllArgsConstructor
+public class BookService implements BookServicePort {
 
-    private BookRepository repository;
+    private final BookRepository repository;
 
-    public BookService(BookRepository repository) {
-        this.repository = repository;
-    }
-
-    public ResponseEntity<Book> patchItemInDatabase(Long id, Map<String, Object> map) {
+    @Override
+    public Book patchBook(Long id, Map<String, Object> map) {
         Book oldBook = repository.findById(id).get();
         map.forEach((key, value)->{
             if(key.equals("publishDate"))
@@ -39,12 +38,13 @@ public class BookService {
                 ReflectionUtils.setField(field,oldBook,value);
             }
         });
-        return new ResponseEntity<>(this.repository.save(oldBook), HttpStatus.ACCEPTED);
+        return this.repository.save(oldBook);
     }
 
-    public ResponseEntity<Book> deleteItemFromDatebase(Long id) {
+    @Override
+    public Book deleteBook(Long id) {
         Book deletedBook = repository.findById(id).get();
         repository.deleteById(id);
-        return new ResponseEntity<>(deletedBook,HttpStatus.ACCEPTED);
+        return deletedBook;
     }
 }

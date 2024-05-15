@@ -1,5 +1,6 @@
 package com.galvanize.CrudPracticeProjectV2.Book;
 
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -8,16 +9,12 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("/books")
 public class BookController {
 
-    private BookRepository repository;
-    private BookService service;
-
-    public BookController(BookRepository repository, BookService service) {
-        this.repository = repository;
-        this.service = service;
-    }
+    private final BookRepository repository;
+    private final BookServicePort service;
 
     @PostMapping("")
     public ResponseEntity<Book> save(@RequestBody Book entity) {
@@ -33,13 +30,13 @@ public class BookController {
     @PatchMapping("/{id}")
     public ResponseEntity<Book> patchItemInDatabase(@PathVariable Long id, @RequestBody Map<String,Object> map)
     {
-        return service.patchItemInDatabase(id,map);
+        return ResponseEntity.accepted().body(service.patchBook(id, map));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Book> deleteItemFromDatabase(@PathVariable Long id)
     {
-        return service.deleteItemFromDatebase(id);
+        return ResponseEntity.accepted().body(service.deleteBook(id));
     }
 
     @GetMapping
